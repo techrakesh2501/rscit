@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        .btn {
+            display: none;
+        }
+
+        .download {
+            display: block;
+            height: 50px;
+            width: 200px;
+            color: white;
+            font: 17px/50px sans-serif, Helvetica;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            background: #355C7D;
+            margin: 10px auto;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 13px;
+            -webkit-box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+        .download:hover {
+            background: #42698b;
+            transition: .5s;
+        }
+    </style>
+</head>
+
+<body>
+    <a class="download btn" href="https://www.google.com">Download 1</a>
+    <a class="download btn" href="https://www.facebook.com">Download 2</a>
+    <a class="download btn" href="https://www.yahoo.com">Download 3</a>
+
+    <script>
+        const websitelink = "home.html"; // redirect website home page link
+        const link = document.querySelectorAll(".btn");
+        const webLink = websitelink + "?o=";
+        for (let i = 0; i < link.length; i++) {
+            const linkElement = link[i];
+            const atag = document.createElement("a");
+            atag.innerText = linkElement.innerText;
+            atag.href = webLink + btoa(linkElement.href) + "&home=true";
+            atag.setAttribute("target", "_blank");
+            atag.classList.add("download");
+            linkElement.parentNode.replaceChild(atag, linkElement);
+        }
+    </script>
+</body>
+
+</html>

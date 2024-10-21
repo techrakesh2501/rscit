@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Web Home</title>
+    <style>
+        #download_db,
+        #verify a,
+        #dcv {
+            display: block;
+            height: 50px;
+            width: 200px;
+            color: white;
+            font: 17px/50px sans-serif, Helvetica;
+            text-decoration: none;
+            text-align: center;
+            /* text-transform: uppercase; */
+            background: #355C7D;
+            margin: 10px auto;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 13px;
+            -webkit-box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            border: none;
+        }
+
+        #download_db:hover,
+        #verify a:hover,
+        #dcv:hover {
+            background: #42698b;
+            transition: .5s;
+            cursor: pointer;
+        }
+
+        div#download_container {
+            width: 300px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        div#bar_container {
+            height: 24px;
+            background: #dcdbd7;
+            border-radius: 20px;
+            border-top: 1px solid #cfcec9;
+            border-bottom: 1px solid #f7f6f4;
+            box-shadow: 0 -1px 0 #bab9b4;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        div#progress_bar {
+            background-color: #dcf1c6;
+            background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0%, #9fbff4), color-stop(100%, #555bb4));
+            background-image: -webkit-linear-gradient(top, #9fbff4 0%, #555bb4 100%);
+            background-image: -moz-linear-gradient(top, #9fbff4 0%, #555bb4 100%);
+            background-image: -ms-linear-gradient(top, #9fbff4 0%, #555bb4 100%);
+            background-image: -o-linear-gradient(top, #9fbff4 0%, #555bb4 100%);
+            background-image: linear-gradient(to bottom, #9fbff4 0%, #555bb4 100%);
+            height: 110%;
+            position: absolute;
+            top: -3px;
+            left: 0px;
+            border-top: 1px solid #e5ebf4;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px #717171;
+            width: 5%;
+            transition: width 0.1s ease-in-out;
+        }
+
+        div#progress_percentage {
+            position: absolute;
+            top: -40px;
+            right: -20px;
+            width: 40px;
+            height: 24px;
+            padding-top: 6px;
+            background: #edeef2;
+            background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0%, #edeef2), color-stop(100%, #c9c9d3));
+            background-image: -webkit-linear-gradient(top, #edeef2 0%, #c9c9d3 100%);
+            background-image: -moz-linear-gradient(top, #edeef2 0%, #c9c9d3 100%);
+            background-image: -ms-linear-gradient(top, #edeef2 0%, #c9c9d3 100%);
+            background-image: -o-linear-gradient(top, #edeef2 0%, #c9c9d3 100%);
+            background-image: linear-gradient(to bottom, #edeef2 0%, #c9c9d3 100%);
+            border-top: 1px solid white;
+            border-right: 1px solid #d2d2d0;
+            border-bottom: 1px solid #999999;
+            border-left: 1px solid #d2d2d0;
+            border-radius: 7px;
+            font-size: 15px;
+            color: #737371;
+            text-shadow: 0 0 2px #bebfc3;
+            box-shadow: 0 2px 5px #c1c1bf;
+            text-align: center;
+        }
+
+        div#progress_percentage::before {
+            /* used for the border of the arrow */
+            content: "";
+            position: absolute;
+            left: 14px;
+            bottom: -11px;
+            border-top: 5px solid #999;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid transparent;
+        }
+
+        div#progress_percentage::after {
+            /* the actual little arrow in the baloon */
+            content: "";
+            position: absolute;
+            left: 14px;
+            bottom: -10px;
+            border-top: 5px solid #c9c9d3;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid transparent;
+        }
+
+        div#text_container {
+            color: #757575;
+            font-weight: bold;
+            font-size: 22px;
+            text-shadow: -1px 1px 1px #d1d0cc;
+        }
+
+        div#text_container span {
+            display: block;
+            font-weight: normal;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        div#verify {
+            width: 300px;
+            margin: auto;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="download_container"></div>
+    <div style="text-align: center;">-----------------------------------</div>
+    <div id="verify"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        const st = 1;
+        const sta = 1;
+        const buttonName1 = "Click to Verify";
+        const buttonName2 = "Continue >>";
+        const afterVerify = "Continue";
+        const bna1 = "Click here to Continue ";
+        const bna2 = "Generate Link";
+        const aVerify = "Go to Link";
+
+        allpostdata = [];
+        const currentUrl = new URLSearchParams(window.location.search);
+        const downloadLink = currentUrl.get('o');
+        const btntype = currentUrl.get('home');
+        const dc = document.getElementById("download_container");
+        const dv = document.getElementById("verify");
+        const dcv = document.getElementById("verify_link");
+
+
+        if (downloadLink != null) {
+            dc.innerHTML = `<button id="download_db" onclick="downloadHome()">${bna1}</button>`;
+        }
+        const rendompost = (data) => {
+            allpostdata = data.feed.entry;
+        }
+        function downloadHome() {
+            if (btntype === "true") {
+                dc.innerHTML = `<div id="loadingbtn""><div id="bar_container"><div id="progress_bar"><div id="progress_percentage">5%</div></div></div><div id="text_container">Loading<span>Please Wait...</span></div></div>`;
+                var bar = $('#progress_bar');
+                var progressContainer = dc;
+                var percentage = parseInt($('#progress_percentage').html());
+                function stopProgress() {
+                    clearInterval(progress);
+                }
+                var progress = setInterval(function () {
+                    percentage++;
+                    if (percentage <= 100) {
+                        $('#progress_percentage').html(percentage + '%');
+                        if (percentage > 5) {
+                            bar.css('width', percentage + '%');
+                        }
+                    }
+                    else {
+                        stopProgress();
+                        dc.innerHTML = `<p style="font-size:20px">Scroll down and click <span style="font-weight: bold; color: blue;">${afterVerify}</span> Button</p>`;
+                        dc.style.background = "rgb(235 230 230)";
+                        dc.style.padding = "10px";
+                        const random = Math.floor(Math.random() * allpostdata.length);
+                        const rendomPost = allpostdata[random].link[4].href;
+                        const dvl = rendomPost + "?o=" + downloadLink;
+                        dv.innerHTML = `<a d="dcv" stye="" href="${dvl}" target="_blank">${buttonName2}</a>`;
+                    };
+                }, st * 10);
+            } else {
+                dc.innerHTML = `<div id="loadingbtn""><div id="bar_container"><div id="progress_bar"><div id="progress_percentage">5%</div></div></div><div id="text_container">Loading<span>Please Wait...</span></div></div>`;
+                var bar = $('#progress_bar');
+                var progressContainer = dc;
+                var percentage = parseInt($('#progress_percentage').html());
+                function stopProgress() {
+                    clearInterval(progress);
+                }
+                var progress = setInterval(function () {
+                    percentage++;
+                    if (percentage <= 100) {
+                        $('#progress_percentage').html(percentage + '%');
+                        if (percentage > 5) {
+                            bar.css('width', percentage + '%');
+                            //console.log(percentage);
+                        }
+                    }
+                    else {
+                        stopProgress();
+                        dc.innerHTML = `<p style="font-size:20px">Scroll down and click agian <span style="font-weight: bold; color: blue;">${aVerify}</span> to download</p>`;
+                        dc.style.background = "rgb(235 230 230)";
+                        dc.style.padding = "10px";
+                        //timer
+                        dv.innerHTML = `<button id="download_db" onclick="getLink()">${bna2}</button>`;
+                    };
+                }, sta * 10);
+            }
+        };
+        function getLink() {
+            dv.innerHTML = `<div id="loadingbtn""><div id="bar_container"><div id="progress_bar"><div id="progress_percentage">5%</div></div></div><div id="text_container">Loading<span>Please Wait...</span></div></div>`;
+            var bar = $('#progress_bar');
+            var progressContainer = dc;
+            var percentage = parseInt($('#progress_percentage').html());
+            function stopProgress() {
+                clearInterval(progress);
+            }
+            var progress = setInterval(function () {
+                percentage++;
+                if (percentage <= 100) {
+                    $('#progress_percentage').html(percentage + '%');
+                    if (percentage > 5) {
+                        bar.css('width', percentage + '%');
+                        //console.log(percentage);
+                    }
+                }
+                else {
+                    stopProgress();
+                    dc.innerHTML = `<p style="font-size:20px">Scroll down and click agian <span style="font-weight: bold; color: blue;">${aVerify}</span> to download</p>`;
+                    dc.style.background = "rgb(235 230 230)";
+                    dc.style.padding = "10px";
+                    const dvgBtn = atob(downloadLink);
+                    dv.innerHTML = `<a d="dcv" href="${dvgBtn}" target="_blank">${aVerify}</a><a href="https://www.rkstudy.net">`;
+                };
+            }, st * 10);
+        }
+    </script>
+    <script defer='defer' src='https://www.apninokari.in/feeds/posts/summary?alt=json-in-script&max-results=100&callback=rendompost'></script>
+</body>
+
+</html>
